@@ -1,0 +1,10 @@
+.content-rbpmd{
+  width: 98.6%;
+  /* height: 100vh; */
+  padding: 20px;
+  background-color: brown;
+  position: absolute;
+  top: 14%;
+  border-radius: 5px;
+  z-index: 1;
+}
