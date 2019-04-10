@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use DB;
 use PDF;
 use Hashids;
 use App\User;
@@ -237,12 +238,22 @@ class PelaksanaController extends Controller
   public function submitFormRbpmd(Request $request)
   {
     if($request->ajax()){
-      $db = RBPMD_Model::where('id', $request->id)->update([
-        'catatan' => $request->val
-      ]);
-
-      if($db){
-        return response()->json(['status' => 'Berhasil Disimpan']);
+      try {
+        DB::connection()->getPdo();
+        DB::beginTransaction();
+        try {
+          $db = RBPMD_Model::where('id', $request->id)->update([
+            'catatan' => $request->val
+          ]);
+            
+          DB::commit();
+          return response()->json(['status'=>true,'msg' => 'Berhasil Disimpan']);
+        } catch (\Exception $e) {
+          DB::rollback();
+          return response()->json(['status'=>false,'msg'=>'Ada masalah saat ingin melanjutkan ke form RBPMD berikutnya!','error'=>$e->getMessage()]);
+        }
+      } catch (\Exception $e) {
+        return response()->json(['status'=>false,'msg'=>'Koneksi Ke Database Terputus!','error'=>$e->getMessage()]);
       }
     }
   }

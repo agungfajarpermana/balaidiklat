@@ -1184,17 +1184,28 @@
                 $('#'+id).removeClass('is-invalid');
               });
             },
-            success: function(data){
-              $('#submit_form').attr('disabled', 'disabled');
+            success: function(res){
+              if(res.status == true){
+                $('#submit_form').attr('disabled', 'disabled');
+                swal({
+                  position: 'top-right',
+                  type: 'success',
+                  title: "Good Job!",
+                  text: res.msg,
+                  showConfirmButton: false,
+                  timer: 1000,
+                  onClose: () => {
+                    window.location.href = "{{route('rppmd.showdata')}}";
+                  }
+                });
+                return false;
+              }
               swal({
-                position: 'top-right',
-                type: 'success',
-                title: data.status,
-                showConfirmButton: false,
-                timer: 1000,
-                onClose: () => {
-                  window.location.href = "{{route('rppmd.showdata')}}";
-                }
+                position: 'center',
+                type: 'info',
+                title: "Pesan Kesalahan!",
+                text: res.msg,
+                showConfirmButton: true
               });
             },
             error: function(res){

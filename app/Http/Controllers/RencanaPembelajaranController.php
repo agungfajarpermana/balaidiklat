@@ -19,6 +19,7 @@ use App\Models\NM_Model;
 use App\Models\MT_Model;
 use App\Models\AW_Model;
 use Hashids;
+use DB;
 
 class RencanaPembelajaranController extends Controller
 {
@@ -214,131 +215,145 @@ class RencanaPembelajaranController extends Controller
       if(!$request->session()->get('nip')) return redirect('/diklat');
 
       if($request->ajax()){
-        $fasilitator   = $request->session()->get('fasilitator');
-        $keyfasilitator= $request->session()->get('keyfasilitator');
-        $peserta   = $request->session()->get('peserta');
-        $keypeserta= $request->session()->get('keypeserta');
-        $metode = $request->session()->get('metodes');
-        $media  = $request->session()->get('medias');
-        $evaluasi  = collect([$request->evalu])->flatten();
-        $referensi = collect([$request->session()->get('referensi'),$request->referen])->flatten();
-        
-        if($evaluasi[0] == null){
-          $evaluasi = collect()->flatten();
-        }
+        try {
+          DB::connection()->getPdo();
+          DB::beginTransaction();
+          try {
+            $fasilitator   = $request->session()->get('fasilitator');
+            $keyfasilitator= $request->session()->get('keyfasilitator');
+            $peserta   = $request->session()->get('peserta');
+            $keypeserta= $request->session()->get('keypeserta');
+            $metode = $request->session()->get('metodes');
+            $media  = $request->session()->get('medias');
+            $evaluasi  = collect([$request->evalu])->flatten();
+            $referensi = collect([$request->session()->get('referensi'),$request->referen])->flatten();
+            
+            if($evaluasi[0] == null){
+              $evaluasi = collect()->flatten();
+            }
 
-        if($referensi[0] == null){
-          $referensi = collect([$request->referen])->flatten();
-        }else if($referensi[1] == null){
-          $referensi = collect([$request->session()->get('referensi')])->flatten();
-        }
+            if($referensi[0] == null){
+              $referensi = collect([$request->referen])->flatten();
+            }else if($referensi[1] == null){
+              $referensi = collect([$request->session()->get('referensi')])->flatten();
+            }
 
-        $x = '';
-        $materi = explode('|', $request->session()->get('materi'));
-        for ($i=0; $i < $count = count($materi)+2; $i++) {
-          $x .= 'X'.'|';
-          if($i == $count-2){
-            $x .= 'X';
-            break;
+            $x = '';
+            $materi = explode('|', $request->session()->get('materi'));
+            for ($i=0; $i < $count = count($materi)+2; $i++) {
+              $x .= 'X'.'|';
+              if($i == $count-2){
+                $x .= 'X';
+                break;
+              }
+            }
+
+            $data = RP_Model::create([
+              'nama_pelatihan' => $request->session()->get('nama_pelatihan'),
+              'mata_pelatihan' => $request->session()->get('mata_pelatihan'),
+              'alokasi_waktu'  => $request->session()->get('alokasi_waktu'),
+              'hasil_belajar'  => $request->session()->get('hasil'),
+              'deskripsi_singkat' => $request->session()->get('deskripsi'),
+              'indikator_hasil_belajar' => $request->session()->get('indikator'),
+              'materi_pokok'   => $request->session()->get('materi'),
+              'waktu'          => $request->session()->get('waktu')->implode('|'),
+              'referensi'      => $referensi->implode('|'),
+              'nip'            => $request->session()->get('nip'),
+              'pengajar'       => $request->session()->get('pengajar'),
+              'check_list'     => $x,
+              'status'         => 1,
+              'tb_rbpmd_id'    => $request->session()->get('id_rbpmd')
+            ]);
+
+            for($i=0; $i < $fasilitator->count(); $i++){
+              RP_2_Model::create([
+                'kegiatan_fasilitator' => $fasilitator[$i],
+                'parent_id' => $keyfasilitator[$i],
+                'tb_rp_id'  => $data->id
+              ]);
+            }
+
+            for($i=0; $i < $peserta->count(); $i++){
+              RP_3_Model::create([
+                'kegiatan_peserta' => $peserta[$i],
+                'parent_id' => $keypeserta[$i],
+                'tb_rp_id'  => $data->id
+              ]);
+            }
+
+            for($i=0; $i < $evaluasi->count(); $i++){
+              RP_4_model::create([
+                'evaluasi' => $evaluasi[$i],
+                'tb_rp_id' => $data->id
+              ]);
+            }
+
+            RBPMD_Model::where('id', $request->session()->get('id_rbpmd'))->update([
+              'created' => 2,
+              'tb_rp_id' => $data->id
+            ]);
+
+            RBPMD_3_Model::where('tb_rbpmd_id', $request->session()->get('id_rbpmd'))->update([
+              'tb_rp_id' => $data->id
+            ]);
+
+            RBPMD_4_Model::where('tb_rbpmd_id', $request->session()->get('id_rbpmd'))->update([
+              'tb_rp_id' => $data->id
+            ]);
+
+            RBPMD_5_Model::where('tb_rbpmd_id', $request->session()->get('id_rbpmd'))->update([
+              'tb_rp_id' => $data->id
+            ]);
+
+            for($i=0; $i < $metode->count(); $i++){
+              RBPMD_4_Model::create([
+                'metode' => $metode[$i],
+                'parent_id_sub' => $request->session()->get('keymetodes')[$i],
+                'tb_rbpmd_id' => $request->session()->get('id_rbpmd'),
+                'tb_rp_id' => $data->id
+              ]);
+            }
+
+            for($i=0; $i < $media->count(); $i++){
+              RBPMD_5_Model::create([
+                'alat_bantu' => $media[$i],
+                'parent_id_metode' => $request->session()->get('keymedias')[$i],
+                'tb_rbpmd_id' => $request->session()->get('id_rbpmd'),
+                'tb_rp_id' => $data->id
+              ]);
+            }
+
+            DB::commit();
+            if($data){
+              $request->session()->forget([
+                'nama_pelatihan',
+                'mata_pelatihan',
+                'alokasi_waktu',
+                'deskripsi',
+                'hasil',
+                'indikator',
+                'materi',
+                'nip',
+                'referensi',
+                'fasilitator',
+                'keyfasilitator',
+                'peserta',
+                'keypeserta',
+                'metodes',
+                'keymetodes',
+                'medias',
+                'keymedias',
+                'waktu'
+              ]);
+              return response()->json(['status'=>true,'msg'=>'Berhasil Disimpan!']);
+            }
+            
+          } catch (\Exception $e) {
+            DB::rollback();
+            return response()->json(['status'=>false,'msg'=>'Ada masalah saat ingin melanjutkan ke form RPPMD!','error'=>$e->getMessage()]);
           }
-        }
-
-        $data = RP_Model::create([
-          'nama_pelatihan' => $request->session()->get('nama_pelatihan'),
-          'mata_pelatihan' => $request->session()->get('mata_pelatihan'),
-          'alokasi_waktu'  => $request->session()->get('alokasi_waktu'),
-          'hasil_belajar'  => $request->session()->get('hasil'),
-          'deskripsi_singkat' => $request->session()->get('deskripsi'),
-          'indikator_hasil_belajar' => $request->session()->get('indikator'),
-          'materi_pokok'   => $request->session()->get('materi'),
-          'waktu'          => $request->session()->get('waktu')->implode('|'),
-          'referensi'      => $referensi->implode('|'),
-          'nip'            => $request->session()->get('nip'),
-          'pengajar'       => $request->session()->get('pengajar'),
-          'check_list'     => $x,
-          'status'         => 1,
-          'tb_rbpmd_id'    => $request->session()->get('id_rbpmd')
-        ]);
-
-        for($i=0; $i < $fasilitator->count(); $i++){
-          RP_2_Model::create([
-            'kegiatan_fasilitator' => $fasilitator[$i],
-            'parent_id' => $keyfasilitator[$i],
-            'tb_rp_id'  => $data->id
-          ]);
-        }
-
-        for($i=0; $i < $peserta->count(); $i++){
-          RP_3_Model::create([
-            'kegiatan_peserta' => $peserta[$i],
-            'parent_id' => $keypeserta[$i],
-            'tb_rp_id'  => $data->id
-          ]);
-        }
-
-        for($i=0; $i < $evaluasi->count(); $i++){
-          RP_4_model::create([
-            'evaluasi' => $evaluasi[$i],
-            'tb_rp_id' => $data->id
-          ]);
-        }
-
-        RBPMD_Model::where('id', $request->session()->get('id_rbpmd'))->update([
-          'created' => 2,
-          'tb_rp_id' => $data->id
-        ]);
-
-        RBPMD_3_Model::where('tb_rbpmd_id', $request->session()->get('id_rbpmd'))->update([
-          'tb_rp_id' => $data->id
-        ]);
-
-        RBPMD_4_Model::where('tb_rbpmd_id', $request->session()->get('id_rbpmd'))->update([
-          'tb_rp_id' => $data->id
-        ]);
-
-        RBPMD_5_Model::where('tb_rbpmd_id', $request->session()->get('id_rbpmd'))->update([
-          'tb_rp_id' => $data->id
-        ]);
-
-        for($i=0; $i < $metode->count(); $i++){
-          RBPMD_4_Model::create([
-            'metode' => $metode[$i],
-            'parent_id_sub' => $request->session()->get('keymetodes')[$i],
-            'tb_rbpmd_id' => $request->session()->get('id_rbpmd'),
-            'tb_rp_id' => $data->id
-          ]);
-        }
-
-        for($i=0; $i < $media->count(); $i++){
-          RBPMD_5_Model::create([
-            'alat_bantu' => $media[$i],
-            'parent_id_metode' => $request->session()->get('keymedias')[$i],
-            'tb_rbpmd_id' => $request->session()->get('id_rbpmd'),
-            'tb_rp_id' => $data->id
-          ]);
-        }
-
-        if($data){
-          $request->session()->forget([
-            'nama_pelatihan',
-            'mata_pelatihan',
-            'alokasi_waktu',
-            'deskripsi',
-            'hasil',
-            'indikator',
-            'materi',
-            'nip',
-            'referensi',
-            'fasilitator',
-            'keyfasilitator',
-            'peserta',
-            'keypeserta',
-            'metodes',
-            'keymetodes',
-            'medias',
-            'keymedias',
-            'waktu'
-          ]);
+        } catch (\Exception $e) {
+          return response()->json(['status'=>false,'msg'=>'Koneksi Ke Database Terputus!','error'=>$e->getMessage()]);
         }
       }
     }
@@ -491,35 +506,45 @@ class RencanaPembelajaranController extends Controller
     public function duplicateSubmitForm(ErrorFormDuplicatePelaksanaRppmd $request)
     {
       if($request->ajax()){
-        $waktu = collect([$request->waktu])->flatten()->implode('|');
+        try {
+          DB::connection()->getPdo();
+          DB::beginTransaction();
+          try {
+            $waktu = collect([$request->waktu])->flatten()->implode('|');
 
-        if (Auth::user()->status == 2) {
-          $list  = collect([$request->check])->flatten()->implode('|');
+            if (Auth::user()->status == 2) {
+              $list  = collect([$request->check])->flatten()->implode('|');
 
-          $db = RP_Model::where('id', $request->id)->update([
-            'waktu'      => $waktu,
-            'catatan'    => $request->catatan,
-            'check_list' => $list
-          ]);
-        }else{
-          $db = RP_Model::where('id', $request->id)->update([
-            'waktu'      => $waktu,
-            'catatan'    => $request->catatan,
-          ]);
-        }
+              $db = RP_Model::where('id', $request->id)->update([
+                'waktu'      => $waktu,
+                'catatan'    => $request->catatan,
+                'check_list' => $list
+              ]);
+            }else{
+              $db = RP_Model::where('id', $request->id)->update([
+                'waktu'      => $waktu,
+                'catatan'    => $request->catatan,
+              ]);
+            }
 
-        $data = RBPMD_Model::where('tb_rp_id', $request->id)->first();
+            $data = RBPMD_Model::where('tb_rp_id', $request->id)->first();
 
-        RBPMD_4_Model::where('tb_rp_id', $request->id)->update([
-          'tb_rbpmd_id' => $data->id
-        ]);
+            RBPMD_4_Model::where('tb_rp_id', $request->id)->update([
+              'tb_rbpmd_id' => $data->id
+            ]);
 
-        RBPMD_5_Model::where('tb_rp_id', $request->id)->update([
-          'tb_rbpmd_id' => $data->id
-        ]);
+            RBPMD_5_Model::where('tb_rp_id', $request->id)->update([
+              'tb_rbpmd_id' => $data->id
+            ]);
 
-        if($db){
-          return response()->json(['status' => "Ok!"]);
+            DB::commit();
+            return response()->json(['status' => true,'msg'=>'Ok!']);
+          } catch (\Exception $e) {
+            DB::rollback();
+            return response()->json(['status'=>false,'msg'=>'Ada masalah saat ingin melanjutkan form RPPMD!','error'=>$e->getMessage()]);
+          }
+        } catch (\Exception $e) {
+          return response()->json(['status'=>false,'msg'=>'Koneksi Ke Database Terputus!','error'=>$e->getMessage()]);
         }
       }
     }

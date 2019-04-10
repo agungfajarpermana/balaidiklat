@@ -404,15 +404,29 @@
                   })
                 },
                 success: function(res){
-                  $('#submit').text('Submit');
+                  if(res.status == true){
+                    $('#submit').text('Submit');
+                    swal({
+                      position: 'top-right',
+                      type: 'success',
+                      title: "Good Job!",
+                      text: res.msg,
+                      showConfirmButton: false,
+                      timer: 1000,
+                      onClose: () => {
+                        window.location.href = "{{route('diklat.home')}}"
+                      }
+                    });
+                    return false;
+                  }
                   swal({
-                    position: 'top-right',
-                    type: 'success',
-                    title: res.msg,
-                    showConfirmButton: false,
-                    timer: 1000,
+                    position: 'center',
+                    type: 'info',
+                    title: "Pesan Kesalahan!",
+                    text: res.msg,
+                    showConfirmButton: true,
                     onClose: () => {
-                      window.location.href = "{{route('diklat.home')}}"
+                      $('#submit').text('Submit');
                     }
                   });
                 },

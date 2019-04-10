@@ -14,6 +14,7 @@ use App\Models\RP_Model;
 use App\Models\NM_Model;
 use App\Models\MT_Model;
 use App\Models\AW_Model;
+use DB;
 
 class DiklatController extends Controller
 {
@@ -205,71 +206,83 @@ class DiklatController extends Controller
     {
       //ErrorFormRbpmd2
       if($request->ajax()){
-        $indikator        = collect([$request->session()->get('indikator')])->flatten()->implode('|');
-        $materi           = collect([$request->session()->get('materi')])->flatten()->implode('|');
-        $submateri        = collect([$request->submateri])->flatten();
-        $metode           = collect([$request->metode])->flatten();
-        $media            = collect([$request->media])->flatten();
-        $waktu            = collect([$request->total])->flatten()->implode('|');
-        $referensi        = collect([$request->ref])->flatten()->implode('|');
+        try {
+          DB::connection()->getPdo();
+          DB::beginTransaction();
+          try {
+            $indikator        = collect([$request->session()->get('indikator')])->flatten()->implode('|');
+            $materi           = collect([$request->session()->get('materi')])->flatten()->implode('|');
+            $submateri        = collect([$request->submateri])->flatten();
+            $metode           = collect([$request->metode])->flatten();
+            $media            = collect([$request->media])->flatten();
+            $waktu            = collect([$request->total])->flatten()->implode('|');
+            $referensi        = collect([$request->ref])->flatten()->implode('|');
 
-        //database
-        $data = RBPMD_Model::create([
-          'nama_pelatihan'          => $request->session()->get('nama_pelatihan'),
-          'mata_pelatihan'          => $request->session()->get('mata_pelatihan'),
-          'alokasi_waktu'           => $request->session()->get('alokasi_waktu'),
-          'hasil_belajar'           => $request->session()->get('hasil'),
-          'indikator_hasil_belajar' => $indikator,
-          'materi_pokok'            => $materi,
-          'waktu'                   => $waktu,
-          'referensi'               => $referensi,
-          'deskripsi_singkat'       => $request->session()->get('deskripsi'),
-          'pengajar'                => $request->nama,
-          'nip'                     => $request->nip,
-          'status'                  => 1,
-          'created'                 => 1
-        ]);
+            //database
+            $data = RBPMD_Model::create([
+              'nama_pelatihan'          => $request->session()->get('nama_pelatihan'),
+              'mata_pelatihan'          => $request->session()->get('mata_pelatihan'),
+              'alokasi_waktu'           => $request->session()->get('alokasi_waktu'),
+              'hasil_belajar'           => $request->session()->get('hasil'),
+              'indikator_hasil_belajar' => $indikator,
+              'materi_pokok'            => $materi,
+              'waktu'                   => $waktu,
+              'referensi'               => $referensi,
+              'deskripsi_singkat'       => $request->session()->get('deskripsi'),
+              'pengajar'                => $request->nama,
+              'nip'                     => $request->nip,
+              'status'                  => 1,
+              'created'                 => 1
+            ]);
 
-        for($i=0; $i < $submateri->count(); $i++){
-          RBPMD_3_Model::create([
-            'sub_materi_pokok' => $submateri[$i],
-            'parent_id_materi' => $request->indexsubmateri[$i],
-            'tb_rbpmd_id' => $data->id
-          ]);
-        }
+            for($i=0; $i < $submateri->count(); $i++){
+              RBPMD_3_Model::create([
+                'sub_materi_pokok' => $submateri[$i],
+                'parent_id_materi' => $request->indexsubmateri[$i],
+                'tb_rbpmd_id' => $data->id
+              ]);
+            }
 
-        for($i=0; $i < $metode->count(); $i++){
-          RBPMD_4_Model::create([
-            'metode' => $metode[$i],
-            'parent_id_sub' => $request->indexmetode[$i],
-            'tb_rbpmd_id' => $data->id
-          ]);
-        }
+            for($i=0; $i < $metode->count(); $i++){
+              RBPMD_4_Model::create([
+                'metode' => $metode[$i],
+                'parent_id_sub' => $request->indexmetode[$i],
+                'tb_rbpmd_id' => $data->id
+              ]);
+            }
 
-        for($i=0; $i < $media->count(); $i++){
-          RBPMD_5_Model::create([
-            'alat_bantu' => $media[$i],
-            'parent_id_metode' => $request->indexmedia[$i],
-            'tb_rbpmd_id' => $data->id
-          ]);
-        }
+            for($i=0; $i < $media->count(); $i++){
+              RBPMD_5_Model::create([
+                'alat_bantu' => $media[$i],
+                'parent_id_metode' => $request->indexmedia[$i],
+                'tb_rbpmd_id' => $data->id
+              ]);
+            }
 
-        if($data){
-          //delete session
-          $request->session()->forget([
-            'nama_pelatihan',
-            'mata_pelatihan',
-            'alokasi_waktu',
-            'deskripsi',
-            'hasil',
-            'indikator',
-            'materi'
-          ]);
+            if($data){
+              //delete session
+              $request->session()->forget([
+                'nama_pelatihan',
+                'mata_pelatihan',
+                'alokasi_waktu',
+                'deskripsi',
+                'hasil',
+                'indikator',
+                'materi'
+              ]);
 
-          return response()->json([
-            'status' => true,
-            'msg'    => 'Berhasil Disimpan...'
-          ]);
+              DB::commit();
+              return response()->json([
+                'status' => true,
+                'msg'    => 'Berhasil Disimpan...'
+              ]);
+            }
+          } catch (\Exception $e) {
+            DB::rollback();
+            return response()->json(['status'=>false,'mag'=>'Ada masalah saat memasukan data RBPMD','error'=>$e->getMessage()]);
+          }
+        } catch (\Exception $e) {
+          return response()->json(['status'=>false,'msg'=>'Koneksi Ke Database Terputus!','error'=>$e->getMessage()]);
         }
       }
     }

@@ -298,17 +298,28 @@
                 beforeSend: function(){
                   beforesend();
                 },
-                success: function (data){
-                  $('#submit').attr('disabled', 'disabled');
+                success: function (res){
+                  if(res.status == true){
+                    $('#submit').attr('disabled', 'disabled');
+                    Swal({
+                      position: 'center',
+                      type: 'success',
+                      title: 'Good Job!',
+                      text: res.msg,
+                      showConfirmButton: false,
+                      timer: 800,
+                      onClose: () => {
+                        window.location.href = "{{route('diklat.home')}}";
+                      }
+                    });
+                    return false;
+                  }
                   Swal({
                     position: 'center',
-                    type: 'success',
-                    title: 'Berhasil disimpan',
-                    showConfirmButton: false,
-                    timer: 800,
-                    onClose: () => {
-                      window.location.href = "{{route('diklat.home')}}";
-                    }
+                    type: 'info',
+                    title: 'Pesan Kesalahan!',
+                    text: res.msg,
+                    showConfirmButton: true
                   });
                 }
               });

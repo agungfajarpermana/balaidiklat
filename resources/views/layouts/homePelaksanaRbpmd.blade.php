@@ -234,16 +234,27 @@
             beforeSend: function(){
               beforesendrequest();
             },
-            success: function(data){
+            success: function(res){
+              if(res.status == true){
+                swal({
+                  position: 'top-right',
+                  type: 'success',
+                  title: "Good Job!",
+                  text: res.msg,
+                  showConfirmButton: false,
+                  timer: 1000,
+                  onClose: () => {
+                    window.location.href = '{{route("rbpmd.home")}}';
+                  }
+                });
+                return false;
+              }
               swal({
-                position: 'top-right',
-                type: 'success',
-                title: data.status,
-                showConfirmButton: false,
-                timer: 1000,
-                onClose: () => {
-                  window.location.href = '{{route("rbpmd.home")}}';
-                }
+                position: 'center',
+                type: 'info',
+                title: "Pesan Kesalahan!",
+                text: res.msg,
+                showConfirmButton: true
               });
             }
           });
