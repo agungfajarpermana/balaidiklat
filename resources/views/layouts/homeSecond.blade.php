@@ -144,7 +144,7 @@
           <div class="form-group">
             <label for="inputAddress">Referensi</label>
             <div class="form-inline" id="dynamic_second">
-              <input type="text" class="form-control col-md-11" name="ref[]" id="referensi" placeholder="referensi">
+              <input type="text" class="form-control col-md-11 input_ref" name="ref[]" id="referensi" placeholder="referensi">
               <button type="button" class="btn btn-outline-success col-md-1 col-sm-2" id="adds">+</button>
             </div>
           </div>
@@ -250,19 +250,22 @@
 
           var id    = $(this).attr('id');
           var ids   = $(this).attr('data-id');
-          var token = $('input[name=_token]').val();
 
           $('#sub'+id).remove();
           $(this).remove();
         });
 
         //button add referensi
-        var j = 1;
-        $('#adds').click(function(){
-          j++;
-          $('#dynamic_second').append('<input type="text" class="form-control col-md-11" name="ref[]" id="rows'+j+'" placeholder="referensi" style="margin-top:5px;"><button type="button" class="btn btn-outline-danger col-md-1 col-sm-2 btn_remove" id="'+j+'" style="margin-top:5px;">x</button>')
+        var j = 0;
+        var ref = $('.input_ref');
+        ref.each(function(i){
+          i++;
+          $('#adds').click(function(){
+            j++;
+            $('#dynamic_second').append('<input type="text" class="form-control col-md-11 input_ref" name="ref[]" id="rows'+j+'" placeholder="referensi" style="margin-top:5px;"><button type="button" class="btn btn-outline-danger col-md-1 col-sm-2 btn_remove_ref" id="'+j+'" style="margin-top:5px;">x</button>')
+          });
         });
-        $(document).on('click', '.btn_remove', function(){
+        $(document).on('click', '.btn_remove_ref', function(){
           var id = $(this).attr('id');
           $('#rows'+id).remove();
           $(this).remove();
@@ -427,6 +430,7 @@
                     showConfirmButton: true,
                     onClose: () => {
                       $('#submit').text('Submit');
+                      $('#submit').removeAttr('disabled');
                     }
                   });
                 },

@@ -53,13 +53,13 @@ class PelaksanaController extends Controller
                                 ->get();
       $all          = RBPMD_Model::where('nip', 'like', '%'.$request->search.'%')->get();
       $total        = $all->count();
-      $last         = ceil($total / $limit);
+      $last         = ($total != 0) ? ceil($total / $limit) : 0;
 
       if ($page > $last) {
         $page = $last;
       }
       $end          = (($page + $link) < $last) ? $page + $link : $last;
-      $current_page = ceil($total / $limit);
+      $current_page = ($total != 0) ? ceil($total / $limit) : 0;
     }else{
       $rbpmd        = RBPMD_Model::orderBy('status', '1')->orderBy('id', 'desc')->offset($start)->limit($limit)->get();
       $total        = RBPMD_Model::count();
@@ -102,14 +102,14 @@ class PelaksanaController extends Controller
                                 ->get();
       $all          = RP_Model::where('nip', 'like', '%'.$request->search.'%')->get();
       $total        = $all->count();
-      $last         = ceil($total/$limit);
+      $last         = ($total != 0) ? ceil($total/$limit) : 0;
 
       if ($page > $last) {
         $page = $last;
       }
 
       $end          = (($page + $link) < $last) ? $page + $link : $last;
-      $current_page = ceil($total / $limit);
+      $current_page = ($total != 0) ? ceil($total / $limit) : 0;
     }else{
       $rppmd        = RP_Model::orderBy('status', '1')->orderBy('id', 'desc')->offset($start)->limit($limit)->get();
       $total        = RP_Model::count();

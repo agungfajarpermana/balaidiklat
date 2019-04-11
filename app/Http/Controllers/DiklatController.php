@@ -216,8 +216,13 @@ class DiklatController extends Controller
             $metode           = collect([$request->metode])->flatten();
             $media            = collect([$request->media])->flatten();
             $waktu            = collect([$request->total])->flatten()->implode('|');
-            $referensi        = collect([$request->ref])->flatten()->implode('|');
-
+            $referensi        = collect([$request->ref])->flatten();
+            
+            if($referensi[0] == null){
+              $referensi = collect()->flatten();
+            }else{
+              $referensi->implode('|');
+            }
             //database
             $data = RBPMD_Model::create([
               'nama_pelatihan'          => $request->session()->get('nama_pelatihan'),
