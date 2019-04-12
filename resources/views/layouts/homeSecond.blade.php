@@ -143,9 +143,13 @@
 
           <div class="form-group">
             <label for="inputAddress">Referensi</label>
-            <div class="form-inline" id="dynamic_second">
-              <input type="text" class="form-control col-md-11 input_ref" name="ref[]" id="referensi" placeholder="referensi">
-              <button type="button" class="btn btn-outline-success col-md-1 col-sm-2" id="adds">+</button>
+            <div class="form-inline">
+                <div class="container-fluid" id="dynamic_second">
+                  <div class="row">
+                    <input type="text" class="form-control col-md-11 input_ref" name="ref[]" id="referensi" placeholder="referensi">
+                    <button type="button" class="btn btn-outline-success col-md-1 col-sm-2" id="adds">+</button>
+                  </div>
+                </div>
             </div>
           </div>
 
@@ -262,7 +266,7 @@
           i++;
           $('#adds').click(function(){
             j++;
-            $('#dynamic_second').append('<input type="text" class="form-control col-md-11 input_ref" name="ref[]" id="rows'+j+'" placeholder="referensi" style="margin-top:5px;"><button type="button" class="btn btn-outline-danger col-md-1 col-sm-2 btn_remove_ref" id="'+j+'" style="margin-top:5px;">x</button>')
+            $('#dynamic_second').append('<div class="row" id="rows'+j+'"><input type="text" class="form-control col-md-11 input_ref" name="ref[]" placeholder="referensi" style="margin-top:5px;"><button type="button" class="btn btn-outline-danger col-md-1 col-sm-2 btn_remove_ref" id="'+j+'" style="margin-top:5px;">x</button></div>')
           });
         });
         $(document).on('click', '.btn_remove_ref', function(){

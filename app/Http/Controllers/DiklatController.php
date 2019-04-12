@@ -223,6 +223,7 @@ class DiklatController extends Controller
             }else{
               $referensi->implode('|');
             }
+            
             //database
             $data = RBPMD_Model::create([
               'nama_pelatihan'          => $request->session()->get('nama_pelatihan'),
