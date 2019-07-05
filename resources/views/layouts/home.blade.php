@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="{{asset('css/bootstrap.min.css')}}" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="{{asset('css/sweetalert2.min.css')}}">
     <link rel="icon" type="image/png" href="{{asset('image/PU.jpg')}}">
 
@@ -80,7 +80,7 @@
               <label for="inputAddress">Indikator Hasil Belajar <span class="text-danger">*</span></label>
               <div class="form-inline" id="dynamic_first">
                 <input type="text" class="form-control col-md-11 col-sm-10 indikator_0 input" name="indikator[]" id="indikators" placeholder="indikator hasil belajar">
-                <button type="button" class="btn btn-outline-success btn-success col-md-1 col-sm-2" id="add">+</button>
+                <button type="button" class="btn btn-outline-success btn-success col-md-1 col-sm-2 text-white" id="add">+</button>
                 <small id="indikator_0" class="invalid-feedback text-danger">
                   
                 </small>
@@ -90,7 +90,7 @@
               <label for="inputAddress">Materi Pokok <span class="text-danger">*</span></label>
               <div class="form-inline" id="dynamic_second">
                 <input type="text" class="form-control col-md-11 col-sm-10 materi_0 input" name="materi[]" id="materis" placeholder="materi pokok">
-                <button type="button" class="btn btn-outline-success btn-success col-md-1 col-sm-2" id="adds">+</button>
+                <button type="button" class="btn btn-outline-success btn-success col-md-1 col-sm-2 text-white" id="adds">+</button>
                 <small id="materi_0" class="invalid-feedback text-danger">
                   
                 </small>
@@ -104,7 +104,7 @@
       </div>
     </div>
     <br>
-    <ul class="nav justify-content-center bg-secondary">
+    <ul class="nav justify-content-center bg-secondary" style="position:absolute;width:100%;margin-top:43px;">
       <li class="nav-item">
         <p class="text-white" style="margin-top:15px;">
           &copy 2018 Balai Diklat PUPR Wilayah III Jakarta
@@ -113,8 +113,8 @@
     </ul>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="{{asset('js/jquery.min.js')}}"></script>
-    <script src="{{asset('js/bootstrap.min.js')}}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <script src="{{asset('js/sweetalert2.min.js')}}"></script>
     <script type="text/javascript">
       $(document).ready(function(){

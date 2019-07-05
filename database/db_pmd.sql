@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 10, 2019 at 01:57 AM
+-- Generation Time: Jul 05, 2019 at 02:39 PM
 -- Server version: 10.1.35-MariaDB
 -- PHP Version: 7.2.9
 
@@ -145,6 +145,21 @@ INSERT INTO `tb_mata_pelatihan` (`id_mata_pelatihan`, `id_nama_pelatihan`, `mata
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `tb_modul`
+--
+
+CREATE TABLE `tb_modul` (
+  `id` int(11) NOT NULL,
+  `judul` text NOT NULL,
+  `file` varchar(150) NOT NULL,
+  `extensi` varchar(15) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `tb_nama_pelatihan`
 --
 
@@ -194,14 +209,6 @@ CREATE TABLE `tb_rbpmd` (
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Dumping data for table `tb_rbpmd`
---
-
-INSERT INTO `tb_rbpmd` (`id`, `nama_pelatihan`, `mata_pelatihan`, `alokasi_waktu`, `hasil_belajar`, `indikator_hasil_belajar`, `materi_pokok`, `waktu`, `referensi`, `deskripsi_singkat`, `catatan`, `nip`, `pengajar`, `status`, `created`, `duplicate`, `tb_rp_id`, `created_at`, `updated_at`) VALUES
-(47, 'Penanganan Drainase Jalan', 'Pembangunan Integritas', '6', 'test hasil belajar', 'test indikator 1|test indikator 2', 'test materi 1|test materi 2', '751|1120', 'test referensi 1', 'test deskripsi singkat', NULL, '198010172005022002', 'Agung Fajar', 1, 2, 0, 42, '2019-01-08 17:51:54', '2019-01-08 17:57:43'),
-(50, 'Penanganan Drainase Jalan', 'Pembangunan Integritas', '6', 'test hasil belajar', 'test indikator 1|test indikator 2', 'test materi 1|test materi 2', '751|1120', 'test referensi 1', 'test deskripsi singkat', NULL, '198010172005022001', 'Dessy Aryani', 1, 0, 2, 44, '2019-01-08 18:23:50', '2019-01-08 18:27:24');
-
 -- --------------------------------------------------------
 
 --
@@ -217,22 +224,6 @@ CREATE TABLE `tb_rbpmd_3` (
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `tb_rbpmd_3`
---
-
-INSERT INTO `tb_rbpmd_3` (`id`, `sub_materi_pokok`, `parent_id_materi`, `tb_rbpmd_id`, `tb_rp_id`, `created_at`, `updated_at`) VALUES
-(307, 'test sub materi 1', 1, 47, 42, '2019-01-08 17:51:54', '2019-01-08 17:57:44'),
-(308, 'test sub materi 2', 1, 47, 42, '2019-01-08 17:51:54', '2019-01-08 17:57:44'),
-(309, 'test sub materi 3', 2, 47, 42, '2019-01-08 17:51:54', '2019-01-08 17:57:44'),
-(310, 'test sub materi 4', 2, 47, 42, '2019-01-08 17:51:54', '2019-01-08 17:57:44'),
-(311, 'test sub materi 5', 2, 47, 42, '2019-01-08 17:51:54', '2019-01-08 17:57:44'),
-(322, 'test sub materi 1', 1, 50, 44, '2019-01-08 18:23:51', '2019-01-08 18:27:24'),
-(323, 'test sub materi 2', 1, 50, 44, '2019-01-08 18:23:51', '2019-01-08 18:27:24'),
-(324, 'test sub materi 3', 2, 50, 44, '2019-01-08 18:23:51', '2019-01-08 18:27:24'),
-(325, 'test sub materi 4', 2, 50, 44, '2019-01-08 18:23:51', '2019-01-08 18:27:24'),
-(326, 'test sub materi 5', 2, 50, 44, '2019-01-08 18:23:51', '2019-01-08 18:27:24');
 
 -- --------------------------------------------------------
 
@@ -250,32 +241,6 @@ CREATE TABLE `tb_rbpmd_4` (
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Dumping data for table `tb_rbpmd_4`
---
-
-INSERT INTO `tb_rbpmd_4` (`id`, `metode`, `parent_id_sub`, `tb_rbpmd_id`, `tb_rp_id`, `created_at`, `updated_at`) VALUES
-(764, 'Expositori(paparan vasilitator)', 1, 47, 42, '2019-01-09 00:57:44', '2019-01-08 17:57:44'),
-(765, 'Tanya Jawab', 1, 47, 42, '2019-01-09 00:57:44', '2019-01-08 17:57:44'),
-(766, 'Studi Kasus', 2, 47, 42, '2019-01-09 00:57:44', '2019-01-08 17:57:44'),
-(767, 'Role Play', 2, 47, 42, '2019-01-09 00:57:44', '2019-01-08 17:57:44'),
-(768, 'Menyimpulkan', 2, 47, 42, '2019-01-09 00:57:44', '2019-01-08 17:57:44'),
-(769, 'Expositori(paparan vasilitator)', 0, 47, 42, '2019-01-08 17:57:44', '2019-01-08 17:57:44'),
-(770, 'Tanya Jawab', 0, 47, 42, '2019-01-08 17:57:44', '2019-01-08 17:57:44'),
-(771, 'fhdhfd', 1, 47, 42, '2019-01-08 17:57:44', '2019-01-08 17:57:44'),
-(772, 'Role Play', 3, 47, 42, '2019-01-08 17:57:44', '2019-01-08 17:57:44'),
-(773, 'Menyimpulkan', 3, 47, 42, '2019-01-08 17:57:44', '2019-01-08 17:57:44'),
-(802, 'Expositori(paparan vasilitator)', 0, 50, 44, '2019-01-08 18:27:25', '2019-01-08 18:27:25'),
-(803, 'Tanya Jawab', 0, 50, 44, '2019-01-08 18:27:25', '2019-01-08 18:27:25'),
-(804, 'Expositori(paparan vasilitator)', 1, 50, 44, '2019-01-08 18:27:25', '2019-01-08 18:27:25'),
-(805, 'Tanya Jawab', 1, 50, 44, '2019-01-08 18:27:25', '2019-01-08 18:27:25'),
-(806, 'Ice Breaking', 1, 50, 44, '2019-01-08 18:27:26', '2019-01-08 18:27:26'),
-(807, 'Studi Kasus', 2, 50, 44, '2019-01-08 18:27:26', '2019-01-08 18:27:26'),
-(808, 'Role Play', 2, 50, 44, '2019-01-08 18:27:26', '2019-01-08 18:27:26'),
-(809, 'Menyimpulkan', 2, 50, 44, '2019-01-08 18:27:26', '2019-01-08 18:27:26'),
-(810, 'Role Play', 3, 50, 44, '2019-01-08 18:27:26', '2019-01-08 18:27:26'),
-(811, 'Menyimpulkan', 3, 50, 44, '2019-01-08 18:27:26', '2019-01-08 18:27:26');
-
 -- --------------------------------------------------------
 
 --
@@ -291,30 +256,6 @@ CREATE TABLE `tb_rbpmd_5` (
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `tb_rbpmd_5`
---
-
-INSERT INTO `tb_rbpmd_5` (`id`, `alat_bantu`, `parent_id_metode`, `tb_rbpmd_id`, `tb_rp_id`, `created_at`, `updated_at`) VALUES
-(882, 'Bahan Tayang', 1, 47, 42, '2019-01-09 00:57:44', '2019-01-08 17:57:44'),
-(883, 'Laptop + LCD', 1, 47, 42, '2019-01-09 00:57:44', '2019-01-08 17:57:44'),
-(884, 'Whiteboard', 2, 47, 42, '2019-01-09 00:57:44', '2019-01-08 17:57:44'),
-(885, 'Spidol', 2, 47, 42, '2019-01-09 00:57:44', '2019-01-08 17:57:44'),
-(886, 'Bahan Tayang', 0, 47, 42, '2019-01-08 17:57:45', '2019-01-08 17:57:45'),
-(887, 'Bahan Peraga', 0, 47, 42, '2019-01-08 17:57:45', '2019-01-08 17:57:45'),
-(888, 'dfhdfhdfh', 1, 47, 42, '2019-01-08 17:57:45', '2019-01-08 17:57:45'),
-(889, 'Speaker', 3, 47, 42, '2019-01-08 17:57:45', '2019-01-08 17:57:45'),
-(890, 'Laptop + LCD', 3, 47, 42, '2019-01-08 17:57:45', '2019-01-08 17:57:45'),
-(915, 'Bahan Tayang', 0, 50, 44, '2019-01-08 18:27:26', '2019-01-08 18:27:26'),
-(916, 'Bahan Peraga', 0, 50, 44, '2019-01-08 18:27:26', '2019-01-08 18:27:26'),
-(917, 'Bahan Tayang', 1, 50, 44, '2019-01-08 18:27:26', '2019-01-08 18:27:26'),
-(918, 'Laptop + LCD', 1, 50, 44, '2019-01-08 18:27:26', '2019-01-08 18:27:26'),
-(919, 'Wifi', 1, 50, 44, '2019-01-08 18:27:26', '2019-01-08 18:27:26'),
-(920, 'Whiteboard', 2, 50, 44, '2019-01-08 18:27:26', '2019-01-08 18:27:26'),
-(921, 'Spidol', 2, 50, 44, '2019-01-08 18:27:26', '2019-01-08 18:27:26'),
-(922, 'Speaker', 3, 50, 44, '2019-01-08 18:27:26', '2019-01-08 18:27:26'),
-(923, 'Laptop + LCD', 3, 50, 44, '2019-01-08 18:27:27', '2019-01-08 18:27:27');
 
 -- --------------------------------------------------------
 
@@ -343,14 +284,6 @@ CREATE TABLE `tb_rencana_pembelajaran` (
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Dumping data for table `tb_rencana_pembelajaran`
---
-
-INSERT INTO `tb_rencana_pembelajaran` (`id`, `nama_pelatihan`, `mata_pelatihan`, `alokasi_waktu`, `hasil_belajar`, `deskripsi_singkat`, `indikator_hasil_belajar`, `materi_pokok`, `waktu`, `referensi`, `catatan`, `nip`, `pengajar`, `check_list`, `status`, `tb_rbpmd_id`, `created_at`, `updated_at`) VALUES
-(42, 'Penanganan Drainase Jalan', 'Prinsip - Prinsip Penanganan Drainase Jalan Yang Berkelanjutan', 6, 'test hasil belajar', 'test deskripsi singkat', 'test indikator 1|test indikator 2', 'test materi 1|test materi 2', '220|466|420|120', 'test referensi 1', NULL, '198010172005022002', 'Agung Fajar', 'X|X|X|X', 1, 47, '2019-01-08 17:57:42', '2019-01-08 17:57:42'),
-(44, 'Penanganan Drainase Jalan', 'Prinsip - Prinsip Penanganan Drainase Jalan Yang Berkelanjutan', 6, 'test hasil belajar', 'test deskripsi singkat', 'test indikator 1|test indikator 2', 'test materi 1|test materi 2', '220|466|420|120', 'test referensi 1', NULL, '198010172005022001', 'Dessy Aryani', 'X|X|X|X', 1, 50, '2019-01-08 18:27:24', '2019-01-08 18:27:24');
-
 -- --------------------------------------------------------
 
 --
@@ -366,26 +299,6 @@ CREATE TABLE `tb_rencana_pembelajaran_2` (
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Dumping data for table `tb_rencana_pembelajaran_2`
---
-
-INSERT INTO `tb_rencana_pembelajaran_2` (`id`, `kegiatan_fasilitator`, `parent_id`, `tb_rp_id`, `created_at`, `updated_at`) VALUES
-(459, 'fasilitator pendahuluan', 0, 42, '2019-01-08 17:57:42', '2019-01-08 17:57:42'),
-(460, 'dfhdfhdfh', 1, 42, '2019-01-08 17:57:42', '2019-01-08 17:57:42'),
-(461, 'dfhdfhhdfh', 1, 42, '2019-01-08 17:57:42', '2019-01-08 17:57:42'),
-(462, 'dfhdfhdfh', 1, 42, '2019-01-08 17:57:42', '2019-01-08 17:57:42'),
-(463, 'dfhfdhfdh', 2, 42, '2019-01-08 17:57:42', '2019-01-08 17:57:42'),
-(464, 'dfhdfhdhdfh', 2, 42, '2019-01-08 17:57:42', '2019-01-08 17:57:42'),
-(465, 'fasilitator penutup', 3, 42, '2019-01-08 17:57:42', '2019-01-08 17:57:42'),
-(473, 'fasilitator pendahuluan', 0, 44, '2019-01-08 18:27:27', '2019-01-08 18:27:27'),
-(474, 'fasilitator 1', 1, 44, '2019-01-08 18:27:27', '2019-01-08 18:27:27'),
-(475, 'fasilitator 2', 1, 44, '2019-01-08 18:27:27', '2019-01-08 18:27:27'),
-(476, 'fasilitator 3', 1, 44, '2019-01-08 18:27:27', '2019-01-08 18:27:27'),
-(477, 'fasilitator 4', 2, 44, '2019-01-08 18:27:27', '2019-01-08 18:27:27'),
-(478, 'fasilitator 5', 2, 44, '2019-01-08 18:27:27', '2019-01-08 18:27:27'),
-(479, 'fasilitator penutup', 3, 44, '2019-01-08 18:27:27', '2019-01-08 18:27:27');
-
 -- --------------------------------------------------------
 
 --
@@ -400,26 +313,6 @@ CREATE TABLE `tb_rencana_pembelajaran_3` (
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `tb_rencana_pembelajaran_3`
---
-
-INSERT INTO `tb_rencana_pembelajaran_3` (`id`, `kegiatan_peserta`, `parent_id`, `tb_rp_id`, `created_at`, `updated_at`) VALUES
-(564, 'peserta pendahuluan', 0, 42, '2019-01-08 17:57:42', '2019-01-08 17:57:42'),
-(565, 'dfhdfhdfh', 1, 42, '2019-01-08 17:57:42', '2019-01-08 17:57:42'),
-(566, 'dfhdfhdf', 1, 42, '2019-01-08 17:57:42', '2019-01-08 17:57:42'),
-(567, 'dfhdfhdfhdfh', 2, 42, '2019-01-08 17:57:43', '2019-01-08 17:57:43'),
-(568, 'dfhdfhdfh', 2, 42, '2019-01-08 17:57:43', '2019-01-08 17:57:43'),
-(569, 'dfhfdhfdh', 2, 42, '2019-01-08 17:57:43', '2019-01-08 17:57:43'),
-(570, 'peserta penutup', 3, 42, '2019-01-08 17:57:43', '2019-01-08 17:57:43'),
-(578, 'peserta pendahuluan', 0, 44, '2019-01-08 18:27:27', '2019-01-08 18:27:27'),
-(579, 'peserta 1', 1, 44, '2019-01-08 18:27:27', '2019-01-08 18:27:27'),
-(580, 'peserta 2', 1, 44, '2019-01-08 18:27:27', '2019-01-08 18:27:27'),
-(581, 'peserta 3', 2, 44, '2019-01-08 18:27:27', '2019-01-08 18:27:27'),
-(582, 'peserta 4', 2, 44, '2019-01-08 18:27:27', '2019-01-08 18:27:27'),
-(583, 'peserta 5', 2, 44, '2019-01-08 18:27:27', '2019-01-08 18:27:27'),
-(584, 'peserta penutup', 3, 44, '2019-01-08 18:27:28', '2019-01-08 18:27:28');
 
 -- --------------------------------------------------------
 
@@ -456,8 +349,9 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `email`, `password`, `status`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'admin@test.test', '$2y$10$lj4r023kyetQByf8TTvUZO70yq3rA9Y7bmPD9q50hY5/ZoUbzHXQi', 1, 'iVjAZBlVYg97OPytWGJV21XOeBGIGr2e6fqenjb7V5fckv6PQdAIPbLJLYot', '2018-04-28 12:01:28', '2018-04-28 12:01:28'),
-(2, 'pusat@test.test', '$2y$10$lj4r023kyetQByf8TTvUZO70yq3rA9Y7bmPD9q50hY5/ZoUbzHXQi', 2, 'P2J1vUb9ECP6mqEfW2AsLGEsee7lWE6JBGIl9BKtHVNLxYKB6OHuqtM2dn8v', '2018-05-08 10:49:55', '2018-05-08 10:49:55');
+(1, 'admin@test.test', '$2y$10$lj4r023kyetQByf8TTvUZO70yq3rA9Y7bmPD9q50hY5/ZoUbzHXQi', 1, 'MHQcfEN5VjIS5Wm0UsEiZtQMHcNSZsnCFa4JAScTcqAcES8NPbRZbfCdrt0Z', '2018-04-28 12:01:28', '2018-04-28 12:01:28'),
+(2, 'pusat@test.test', '$2y$10$lj4r023kyetQByf8TTvUZO70yq3rA9Y7bmPD9q50hY5/ZoUbzHXQi', 2, 'ImqT4q8IKk3PqUCRa2eAHsrEN4YdSg1j3csDuyepImCJezSkJgUNdihl2Y1N', '2018-05-08 10:49:55', '2018-05-08 10:49:55'),
+(3, 'owner@test.test', '$2y$10$qS5E5JU6Mgj/qLwu3NpE6.bNPBqBj.7Qqi0F5qESbhbPWueBaGPdy', 3, '1wsLU9U18kes3rhXVOII7iR0qUpzr5Sl0mVZbxFtNE2r3ntYYIZ7qfzY3J4p', '2019-01-29 11:23:58', '2019-01-29 22:20:37');
 
 --
 -- Indexes for dumped tables
@@ -474,6 +368,12 @@ ALTER TABLE `tb_alokasi_waktu`
 --
 ALTER TABLE `tb_mata_pelatihan`
   ADD PRIMARY KEY (`id_mata_pelatihan`);
+
+--
+-- Indexes for table `tb_modul`
+--
+ALTER TABLE `tb_modul`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `tb_nama_pelatihan`
@@ -561,6 +461,12 @@ ALTER TABLE `tb_mata_pelatihan`
   MODIFY `id_mata_pelatihan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
 
 --
+-- AUTO_INCREMENT for table `tb_modul`
+--
+ALTER TABLE `tb_modul`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `tb_nama_pelatihan`
 --
 ALTER TABLE `tb_nama_pelatihan`
@@ -570,43 +476,43 @@ ALTER TABLE `tb_nama_pelatihan`
 -- AUTO_INCREMENT for table `tb_rbpmd`
 --
 ALTER TABLE `tb_rbpmd`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `tb_rbpmd_3`
 --
 ALTER TABLE `tb_rbpmd_3`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=327;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `tb_rbpmd_4`
 --
 ALTER TABLE `tb_rbpmd_4`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=812;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `tb_rbpmd_5`
 --
 ALTER TABLE `tb_rbpmd_5`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=924;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `tb_rencana_pembelajaran`
 --
 ALTER TABLE `tb_rencana_pembelajaran`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `tb_rencana_pembelajaran_2`
 --
 ALTER TABLE `tb_rencana_pembelajaran_2`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=480;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `tb_rencana_pembelajaran_3`
 --
 ALTER TABLE `tb_rencana_pembelajaran_3`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=585;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `tb_rencana_pembelajaran_4`
@@ -618,7 +524,7 @@ ALTER TABLE `tb_rencana_pembelajaran_4`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- Constraints for dumped tables
