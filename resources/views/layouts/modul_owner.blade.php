@@ -211,10 +211,10 @@
           maxFilesize: 7, // MB
           parallelUploads: 5,
           addRemoveLinks : true,
-          acceptedFiles: "application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/docx,application/pdf,application/msword",
+          acceptedFiles: '.doc, .docx, .pdf, .xls, .xlsx, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/pdf',
           autoProcessQueue: false,
           dictFileTooBig: "File Terlalu Besar Bro or Sis Maksimal 7 MB",
-          dictInvalidFileType: "Jenis Extension File Ga Sesuai Tuh!",
+          dictInvalidFileType: "Jenis Extension File Harus .doc, .xls, .pdf!",
           dictMaxFilesExceeded: "File Yang Dimasukan Max 5, Hapus Dulu Lebihnya, Nanti Upload Lagi :)",
           init: function() {
             this.on("error", function (file, data) {
